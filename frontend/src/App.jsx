@@ -1,34 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import Homepage from './Components/Homepage'
+import NavBar from './Components/NavBar'
+import LoginPage from './Components/LoginPage'
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { AuthProvider } from './context/AuthContext';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme({
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root:focus-within .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'black',
+            borderWidth: '2px',
+          },
+          '& .MuiFilledInput-root:focus-within .MuiFilledInput-underline:after': {
+            borderBottomColor: 'black',
+            borderBottomWidth: '2px',
+          },
+          '& .MuiInput-root:focus-within .MuiInput-underline:after': {
+            borderBottomColor: 'black',
+            borderBottomWidth: '2px',
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: 'black',
+          },
+        },
+      },
+    },
+  },
+});
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <ThemeProvider theme={theme}>
+    <AuthProvider>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <LoginPage />
+            }
+          />
+          
+          <Route
+            path="/home"
+            element={
+              <Homepage />
+            }
+          />
+          
+          <Route path="*" element={<Navigate to="/home" />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+    </ThemeProvider>
   )
 }
 
